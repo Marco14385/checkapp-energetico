@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>CheckApp Energetico | Screening orientativo</title>
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    :root{
+
+      --A4:#1b5e20;
+      --A3:#2e7d32;
+      --A2:#43a047;
+      --A1:#66bb6a;
+      --B:#a3d65c;
+      --C:#f5e642;
+      --D:#f2c14e;
+      --E:#d07a2b;
+      --F:#a2554f;
+      --G:#e53935;
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --good: #4ade80;
+      --warn: #fbbf24;
+      --bad:  #fb7185;
+      --accent:#60a5fa;
+      --accent2:#a78bfa;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1100px 700px at 10% 0%, rgba(96,165,250,.28), transparent 60%),
+        radial-gradient(900px 650px at 95% 10%, rgba(167,139,250,.22), transparent 55%),
+        radial-gradient(800px 600px at 35% 100%, rgba(74,222,128,.14), transparent 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:1120px;margin:0 auto;padding:24px}
+    .top{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:18px; border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(96,165,250,1), rgba(167,139,250,1));
+      display:flex;align-items:center;justify-content:center;
+      color:#0b1020;font-weight:950; letter-spacing:.5px;
+      box-shadow: 0 12px 30px rgba(96,165,250,.25);
+    }
+    .title{font-weight:950; letter-spacing:.2px; font-size:16px}
+    .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    button,a.btn{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex; gap:8px; align-items:center;
+      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+    }
+    button:hover,a.btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18);}
+    button.primary{
+      background: linear-gradient(135deg, rgba(96,165,250,.95), rgba(167,139,250,.92));
+      border-color: rgba(255,255,255,.18);
+      color:#0b1020;
+    }
+    button.primary:hover{background: linear-gradient(135deg, rgba(96,165,250,1), rgba(167,139,250,1));}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+    @media (min-width: 980px){ .grid{grid-template-columns:1.15fr .85fr;} }
+    .card{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    h2{margin:0 0 10px;font-size:14px;letter-spacing:.2px}
+    .muted{color:var(--muted);font-size:12px}
+    .small{color:var(--muted2);font-size:11px}
+    label{display:block;font-size:12px;color:var(--muted);font-weight:750;margin:10px 0 6px}
+    input,select,textarea{
+      width:100%;
+      background: rgba(9,12,24,.55);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      padding: 10px 12px;
+      outline:none;
+    }
+    textarea{min-height:92px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color: rgba(96,165,250,.55); box-shadow: 0 0 0 4px rgba(96,165,250,.12);}
+    .row2{display:grid;grid-template-columns:1fr;gap:10px}
+    @media (min-width: 560px){ .row2{grid-template-columns:1fr 1fr;} }
+    .divider{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+    .pillrow{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 6px}
+    .pill{
+      padding:8px 10px;border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-weight:850;font-size:12px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;border-radius:999px;font-weight:950;font-size:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
+    .dot{width:10px;height:10px;border-radius:50%}
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+    .meter{
+      margin-top:12px;
+      height: 10px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--good), var(--warn), var(--bad));
+      transition: width .35s ease;
+    }
+    ul{margin:10px 0 0 18px;color:var(--text)}
+    .jsonbox{
+      background: rgba(9,12,24,.55);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,.86);
+      overflow:auto;
+      max-height: 280px;
+      white-space: pre;
+    }
+    .notice{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      padding:12px;
+    }
+    .notice b{color:#fff}
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px;
+      align-items:center;
+    }
+
+    /* PRINT */
+    .report{display:none}
+    @media print{
+      body{background:#fff;color:#111}
+      .no-print{display:none !important}
+      .report{display:block}
+      .wrap{max-width:100%;padding:0}
+      .card,.top{box-shadow:none; background:#fff; border:1px solid #ddd; color:#111}
+      .jsonbox{border:1px solid #ddd; color:#111; background:#fff}
+    }
+  
+    .classTag{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      font-weight:950;font-size:12px;
+    }
+    .swatch{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.25)}
+    .scale{
+      margin-top:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding:10px;
+    }
+    .scaleRow{display:grid;grid-template-columns: 1fr;gap:8px}
+    .scaleBar{
+      height:14px;border-radius:999px; overflow:hidden;
+      display:flex;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.15);
+    }
+    .seg{height:100%}
+    .seg.a4{background:var(--A4);width:10%}
+    .seg.a3{background:var(--A3);width:10%}
+    .seg.a2{background:var(--A2);width:10%}
+    .seg.a1{background:var(--A1);width:10%}
+    .seg.b{background:var(--B);width:12%}
+    .seg.c{background:var(--C);width:12%}
+    .seg.d{background:var(--D);width:12%}
+    .seg.e{background:var(--E);width:12%}
+    .seg.f{background:var(--F);width:12%}
+    .seg.g{background:var(--G);width:10%}
+    .marker{
+      position:relative; height:0;
+    }
+    .pin{
+      position:absolute; top:-18px;
+      width:0;height:0;
+      border-left:7px solid transparent;
+      border-right:7px solid transparent;
+      border-top:10px solid rgba(255,255,255,.92);
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+      transform: translateX(-7px);
+    }
+    .scaleLabels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted2)}
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top no-print">
+      <div class="brand">
+        <div class="logo">CE</div>
+        <div>
+          <div class="title">CheckApp Energetico</div>
+          <div class="subtitle">Screening orientativo + interventi prioritari (non APE). Bello quanto basta per non vergognarsene.</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button onclick="saveDraft()"><span>💾</span><span>Salva</span></button>
+        <button onclick="loadDraft()"><span>📂</span><span>Carica</span></button>
+        <button onclick="exportPDF()"><span>🧾</span><span>Report PDF</span></button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card no-print">
+        <h2>Dati immobile</h2>
+        <div class="notice small">
+          <b>Disclaimer:</b> output indicativo. Per certificazione APE servono rilievi e calcoli secondo normativa vigente.
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Cliente / riferimento (facoltativo)</label>
+            <input id="client" placeholder="Es. Rossi Mario">
+          </div>
+          <div>
+            <label>Comune (facoltativo)</label>
+            <input id="city" placeholder="Es. Roma">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Superficie (m²)</label>
+            <input id="area" type="number" min="10" step="1" value="80">
+          </div>
+          <div>
+            <label>Altezza media (m)</label>
+            <input id="height" type="number" min="2.2" max="3.5" step="0.1" value="2.7">
+          </div>
+        </div>
+
+        <label>Anno di costruzione / ristrutturazione principale</label>
+        <select id="yearBand">
+          <option value="pre70">Prima del 1970</option>
+          <option value="70_90" selected>1970–1990</option>
+          <option value="91_05">1991–2005</option>
+          <option value="06_15">2006–2015</option>
+          <option value="16plus">Dal 2016 in poi</option>
+        </select>
+
+        <label>Zona climatica (indicativa)</label>
+        <select id="climate">
+          <option value="A">A (molto mite)</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D" selected>D</option>
+          <option value="E">E</option>
+          <option value="F">F (molto fredda)</option>
+        </select>
+
+        <div class="row2">
+          <div>
+            <label>Tipologia</label>
+            <select id="type">
+              <option value="apartment" selected>Appartamento</option>
+              <option value="house">Casa indipendente / villa</option>
+            </select>
+          </div>
+          <div>
+            <label>Posizione</label>
+            <select id="exposure">
+              <option value="middle" selected>Intermedio</option>
+              <option value="top">Ultimo piano / sottotetto</option>
+              <option value="ground">Piano terra / sopra locali freddi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <h2>Involucro</h2>
+
+        <label>Isolamento pareti</label>
+        <select id="wallIns">
+          <option value="none" selected>Assente / minimo</option>
+          <option value="some">Parziale</option>
+          <option value="good">Buono (recente)</option>
+        </select>
+
+        <div class="row2">
+          <div>
+            <label>Infissi</label>
+            <select id="windows">
+              <option value="single" selected>Vecchi / singolo vetro</option>
+              <option value="double_old">Doppio vetro datato</option>
+              <option value="double_new">Doppio/triplo recente</option>
+            </select>
+          </div>
+          <div>
+            <label>Tenuta aria (spifferi)</label>
+            <select id="airtight">
+              <option value="poor" selected>Scarsa</option>
+              <option value="avg">Media</option>
+              <option value="good">Buona</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Isolamento copertura / solaio</label>
+        <select id="roofIns">
+          <option value="none" selected>Assente</option>
+          <option value="some">Parziale</option>
+          <option value="good">Buono</option>
+        </select>
+
+        <div class="divider"></div>
+        <h2>Impianti</h2>
+
+        <label>Riscaldamento</label>
+        <select id="heat">
+          <option value="old_boiler" selected>Caldaia tradizionale datata</option>
+          <option value="condensing">Caldaia a condensazione</option>
+          <option value="hp">Pompa di calore</option>
+          <option value="district">Teleriscaldamento</option>
+          <option value="stove">Stufa / pellet principale</option>
+        </select>
+
+        <div class="row2">
+          <div>
+            <label>Terminali</label>
+            <select id="emitters">
+              <option value="radiators" selected>Radiatori</option>
+              <option value="floor">Pavimento radiante</option>
+              <option value="fan">Ventilconvettori / split</option>
+            </select>
+          </div>
+          <div>
+            <label>Regolazione</label>
+            <select id="controls">
+              <option value="none" selected>Basica / assente</option>
+              <option value="thermostat">Termostato</option>
+              <option value="smart">Smart + valvole/zone</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>ACS</label>
+            <select id="dhw">
+              <option value="old" selected>Boiler/ACS datata</option>
+              <option value="condensing">Da caldaia a condensazione</option>
+              <option value="hp">PDC per ACS</option>
+              <option value="solar">Solare termico</option>
+            </select>
+          </div>
+          <div>
+            <label>Fotovoltaico</label>
+            <select id="pv">
+              <option value="none" selected>Assente</option>
+              <option value="small">Piccolo (1–3 kWp)</option>
+              <option value="med">Medio (3–6 kWp)</option>
+              <option value="large">Grande (&gt;6 kWp)</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Note (facoltative)</label>
+        <textarea id="notes" placeholder="Es. infissi cambiati lato sud, caldaia 2012, ultimo piano..."></textarea>
+
+        <div class="actions" style="margin-top:14px">
+          <button class="primary" onclick="calc()"><span>⚡</span><span>Calcola</span></button>
+          <button onclick="resetForm()"><span>↩️</span><span>Reset</span></button>
+          <button onclick="copySummary()"><span>📋</span><span>Copia JSON</span></button>
+        </div>
+
+        <p class="small" style="margin-top:10px">Tip: fai “Calcola” davanti al cliente, poi “Report PDF” e hai già un promemoria pulito.</p>
+      </div>
+
+      <div class="card">
+        <h2>Risultato</h2>
+
+        <div class="pillrow">
+          <span class="badge" id="sevBadge"><span class="dot warn"></span><span>In attesa di calcolo</span></span>
+          <span class="pill" id="idxPill">Indice: —</span>
+          <span class="pill" id="classPill">Classe: —</span>
+          <span class="pill" id="volPill">Volume: —</span>
+        </div>
+
+        <div class="meter" title="Più è pieno, peggio stai (ma almeno lo sai).">
+          <div class="bar" id="bar"></div>
+        </div>
+
+        <div class="scale" aria-label="Scala classi energetiche">
+          <div class="scaleRow">
+            <div class="scaleBar">
+              <div class="seg a4" title="A4"></div>
+              <div class="seg a3" title="A3"></div>
+              <div class="seg a2" title="A2"></div>
+              <div class="seg a1" title="A1"></div>
+              <div class="seg b" title="B"></div>
+              <div class="seg c" title="C"></div>
+              <div class="seg d" title="D"></div>
+              <div class="seg e" title="E"></div>
+              <div class="seg f" title="F"></div>
+              <div class="seg g" title="G"></div>
+            </div>
+            <div class="marker"><div class="pin" id="scalePin" style="left:0%"></div></div>
+            <div class="scaleLabels">
+              <span>A4</span><span>A3</span><span>A2</span><span>A1</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="divider"></div>
+
+        <h2>Interventi consigliati</h2>
+        <div id="adviceBox" class="muted">—</div>
+
+        <div class="divider"></div>
+
+        <h2>Prossimo passo</h2>
+        <div class="muted">Se vuoi numeri veri: sopralluogo + APE/diagnosi + piano interventi.</div>
+        <div class="cta">
+          <a class="btn" id="ctaEmail" href="#" title="Sostituisci l'email nel codice."><span>✉️</span><span>Richiedi sopralluogo / APE</span></a>
+          <span class="small" id="costHint">—</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Riepilogo (JSON)</h2>
+        <div id="summary" class="jsonbox">—</div>
+      </div>
+    </div>
+
+    <div class="card report">
+      <h2>CheckApp Energetico - Report (screening orientativo)</h2>
+      <div class="small" id="printMeta"></div>
+      <div class="divider"></div>
+      <h2>Dati (JSON)</h2>
+      <div class="jsonbox" id="printData"></div>
+      <div class="divider"></div>
+      <h2>Risultato</h2>
+      <div id="printResult"></div>
+      <div class="divider"></div>
+      <h2>Interventi prioritari</h2>
+      <div id="printAdvice"></div>
+      <div class="divider"></div>
+      <div class="small">
+        Disclaimer: report orientativo. Non ha valore di APE. Per certificazioni servono rilievi e calcoli secondo normativa vigente.
+      </div>
+    </div>
+
+  </div>
+
+<script>
+function v(id){ return document.getElementById(id).value; }
+function n(id){ return parseFloat(document.getElementById(id).value || "0"); }
+function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
+
+function scoreClimate(zone){ return ({A:0, B:4, C:8, D:12, E:18, F:24})[zone] ?? 12; }
+function scoreYear(band){ return ({pre70:28, "70_90":22, "91_05":16, "06_15":10, "16plus":4})[band] ?? 18; }
+function scoreType(t){ return (t==="house") ? 10 : 0; }
+function scoreExposure(e){ return ({middle:0, top:6, ground:5})[e] ?? 0; }
+function scoreIns(val, kind){
+  if(kind==="wall") return ({none:18, some:10, good:4})[val] ?? 12;
+  if(kind==="roof") return ({none:10, some:6, good:2})[val] ?? 6;
+  return 0;
+}
+function scoreWindows(w){ return ({single:14, double_old:8, double_new:3})[w] ?? 10; }
+function scoreAirtight(a){ return ({poor:8, avg:4, good:1})[a] ?? 4; }
+function scoreHeat(h){ return ({old_boiler:18, condensing:10, hp:4, district:8, stove:12})[h] ?? 12; }
+function scoreEmitters(e){ return ({radiators:6, floor:2, fan:4})[e] ?? 4; }
+function scoreControls(c){ return ({none:6, thermostat:3, smart:1})[c] ?? 3; }
+function scoreDHW(d){ return ({old:8, condensing:4, hp:2, solar:1})[d] ?? 4; }
+function scorePV(p){ return ({none:0, small:-4, med:-7, large:-10})[p] ?? 0; }
+
+function classFromIndex(idx){
+  if(idx <= 18) return "A4–A2";
+  if(idx <= 28) return "A1";
+  if(idx <= 38) return "B";
+  if(idx <= 50) return "C";
+  if(idx <= 64) return "D";
+  if(idx <= 78) return "E";
+  if(idx <= 92) return "F";
+  return "G";
+}
+function classLabel(cls){
+  const map = { "A4–A2":"Molto efficiente", "A1":"Efficiente", "B":"Buona", "C":"Discreta", "D":"Media", "E":"Scarsa", "F":"Molto scarsa", "G":"Critica" };
+  return map[cls] || "";
+}
+function sevFromIdx(idx){
+  if(idx <= 38) return "good";
+  if(idx <= 64) return "warn";
+  return "bad";
+}
+function euroHint(idx, area){
+  const base = (area/80) * 900;
+  const mult = 0.6 + (idx/100)*1.4;
+  const est = Math.round(base*mult/50)*50;
+  return `Spesa annua riscaldamento (ordine di grandezza): ~€${est}`;
+}
+function buildMailto(sum){
+  const to = "info@example.com"; // <-- cambia qui
+  const subject = encodeURIComponent("Richiesta sopralluogo / APE (CheckApp Energetico)");
+  const body = encodeURIComponent(
+`Ciao,
+ho effettuato un CheckApp Energetico orientativo e vorrei un contatto per sopralluogo / APE.
+
+Riepilogo:
+${JSON.stringify(sum, null, 2)}
+
+Note:
+${v("notes") || "-"}`
+  );
+  return `mailto:${to}?subject=${subject}&body=${body}`;
+}
+
+
+function colorForClass(cls){
+  // cls can be "A4–A2", "A1", "B", "C", "D", "E", "F", "G"
+  if(cls==="A4–A2") return getComputedStyle(document.documentElement).getPropertyValue("--A2").trim() || "#43a047";
+  const map = {A1:"--A1", B:"--B", C:"--C", D:"--D", E:"--E", F:"--F", G:"--G"};
+  const key = map[cls];
+  if(!key) return "#60a5fa";
+  return getComputedStyle(document.documentElement).getPropertyValue(key).trim();
+}
+function pinPosFromClass(cls){
+  // position across 10 segments: A4 A3 A2 A1 B C D E F G
+  // For A4–A2, point at A2 segment.
+  const segIndex = (cls==="A4–A2") ? 2 : ({A1:3,B:4,C:5,D:6,E:7,F:8,G:9}[cls] ?? 6);
+  // Each segment treated as 10% except B..F 12%. We'll approximate with cumulative based on widths above.
+  const widths = [10,10,10,10,12,12,12,12,12,10];
+  const cum = [0]
+  for(let w of widths) cum.push(cum[cum.length-1]+w);
+  const left = cum[segIndex] + widths[segIndex]/2; // center of segment
+  return left; // percent
+}
+
+function calc(){
+  const area = clamp(n("area"), 10, 500);
+  const h = clamp(n("height"), 2.2, 3.5);
+
+  let idx = 0;
+  idx += scoreClimate(v("climate"));
+  idx += scoreYear(v("yearBand"));
+  idx += scoreType(v("type"));
+  idx += scoreExposure(v("exposure"));
+  idx += scoreIns(v("wallIns"), "wall");
+  idx += scoreIns(v("roofIns"), "roof");
+  idx += scoreWindows(v("windows"));
+  idx += scoreAirtight(v("airtight"));
+  idx += scoreHeat(v("heat"));
+  idx += scoreEmitters(v("emitters"));
+  idx += scoreControls(v("controls"));
+  idx += scoreDHW(v("dhw"));
+  idx += scorePV(v("pv"));
+  idx = clamp(idx, 5, 110);
+
+  const cls = classFromIndex(idx);
+  const sev = sevFromIdx(idx);
+
+  const sevBadge = document.getElementById("sevBadge");
+  const dot = sev === "good" ? "good" : (sev==="bad" ? "bad" : "warn");
+  const sevText = sev === "good" ? "Buona situazione" : (sev==="bad" ? "Criticità alta" : "Da migliorare");
+  sevBadge.innerHTML = `<span class="dot ${dot}"></span><span>${sevText}</span>`;
+
+  document.getElementById("idxPill").innerHTML = `Indice: <b>${idx.toFixed(0)}/100</b>`;
+  document.getElementById("classPill").innerHTML = `Classe: <span class="classTag"><span class="swatch" style="background:${colorForClass(cls)}"></span><b>${cls}</b></span> <span class="small">(${classLabel(cls)})</span>`;
+  document.getElementById("volPill").innerHTML = `Volume: <b>${Math.round(area*h)} m³</b>`;
+
+  const pct = Math.round(((idx-5)/(110-5))*100);
+  document.getElementById("bar").style.width = pct + "%";
+  document.getElementById("bar").style.background = "linear-gradient(90deg, var(--A4), var(--A3), var(--A2), var(--A1), var(--B), var(--C), var(--D), var(--E), var(--F), var(--G))";
+  document.getElementById("bar").style.opacity = "0.95";
+
+  let adv = [];
+  const wall = v("wallIns"), roof = v("roofIns"), win = v("windows"), air = v("airtight");
+  const heat = v("heat"), ctrl = v("controls"), pv = v("pv"), dhw = v("dhw");
+
+  if(wall==="none") adv.push("Isolamento pareti (cappotto mirato): riduce dispersioni e migliora comfort.");
+  if(roof==="none" && (v("exposure")==="top" || v("type")==="house")) adv.push("Isolamento copertura/solaio: ottimo rapporto beneficio/costo su ultimo piano o casa indipendente.");
+  if(win==="single") adv.push("Infissi: sostituzione/riqualifica + posa corretta (nastri/controtelaio) per ridurre spifferi.");
+  if(air==="poor") adv.push("Tenuta all’aria: guarnizioni, cassonetti, sigillature (spesso low-cost, alta resa).");
+  if(heat==="old_boiler") adv.push("Generatore: valutare caldaia a condensazione o PDC + bilanciamento impianto.");
+  if(ctrl!=="smart") adv.push("Regolazione: termostato evoluto + valvole/zone (moltiplicatore di efficienza).");
+  if(dhw==="old") adv.push("ACS: valutare PDC ACS o integrazione solare termico (se consumi elevati).");
+  if(pv==="none") adv.push("Fotovoltaico: se fattibile, anche piccolo supporta consumi e futura PDC.");
+
+  if(adv.length===0) adv.push("Sei già messo bene: punta su regolazione, manutenzione e piccoli miglioramenti di comfort/consumi.");
+  adv = adv.slice(0,5);
+
+  document.getElementById("adviceBox").innerHTML =
+    `<ul>${adv.map(x=>`<li>${x}</li>`).join("")}</ul><div class="small" style="margin-top:10px;color:rgba(255,255,255,.70)">Step consigliato: sopralluogo + APE/diagnosi per quantificare benefici e priorità.</div>`;
+
+  const sum = {
+    cliente: v("client") || null,
+    comune: v("city") || null,
+    superficie_mq: area,
+    altezza_m: h,
+    zona_climatica: v("climate"),
+    anno_banda: v("yearBand"),
+    tipologia: v("type"),
+    posizione: v("exposure"),
+    pareti: wall,
+    copertura: roof,
+    infissi: win,
+    tenuta_aria: air,
+    riscaldamento: heat,
+    terminali: v("emitters"),
+    regolazione: ctrl,
+    acs: dhw,
+    fotovoltaico: pv,
+    note: v("notes") || null,
+    indice_screening: idx.toFixed(0),
+    classe_stimata: cls
+  };
+  document.getElementById("summary").textContent = JSON.stringify(sum, null, 2);
+
+  document.getElementById("ctaEmail").href = buildMailto(sum);
+  document.getElementById("costHint").textContent = euroHint(idx, area);
+
+  document.getElementById("printMeta").textContent = new Date().toLocaleString("it-IT");
+  document.getElementById("printData").textContent = JSON.stringify(sum, null, 2);
+  document.getElementById("printResult").innerHTML =
+    `<div><b>Indice:</b> ${idx.toFixed(0)}/100 • <b>Classe stimata:</b> ${cls} (${classLabel(cls)}) • <b>Volume:</b> ${Math.round(area*h)} m³</div>
+     <div style="margin-top:6px">${euroHint(idx, area)} (indicativo)</div>`;
+  document.getElementById("printAdvice").innerHTML = `<ul>${adv.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+}
+
+function resetForm(){
+  ["client","city","notes"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("area").value=80;
+  document.getElementById("height").value=2.7;
+  document.getElementById("yearBand").value="70_90";
+  document.getElementById("climate").value="D";
+  document.getElementById("type").value="apartment";
+  document.getElementById("exposure").value="middle";
+  document.getElementById("wallIns").value="none";
+  document.getElementById("windows").value="single";
+  document.getElementById("airtight").value="poor";
+  document.getElementById("roofIns").value="none";
+  document.getElementById("heat").value="old_boiler";
+  document.getElementById("emitters").value="radiators";
+  document.getElementById("controls").value="none";
+  document.getElementById("dhw").value="old";
+  document.getElementById("pv").value="none";
+
+  document.getElementById("sevBadge").innerHTML = `<span class="dot warn"></span><span>In attesa di calcolo</span>`;
+  document.getElementById("idxPill").textContent="Indice: —";
+  document.getElementById("classPill").textContent="Classe: —";
+  document.getElementById("volPill").textContent="Volume: —";
+  document.getElementById("bar").style.width="0%";
+  document.getElementById("adviceBox").textContent="—";
+  document.getElementById("summary").textContent="—";
+  document.getElementById("ctaEmail").href="#";
+  document.getElementById("costHint").textContent="—";
+}
+
+async function copySummary(){
+  const txt = document.getElementById("summary").textContent;
+  if(!txt || txt==="—"){ alert("Calcola prima il risultato."); return; }
+  try{ await navigator.clipboard.writeText(txt); alert("Copiato."); }
+  catch(e){ alert("Copia non disponibile: seleziona il testo e copia manualmente."); }
+}
+
+function exportPDF(){
+  const txt = document.getElementById("summary").textContent;
+  if(!txt || txt==="—"){ alert("Calcola prima il risultato."); return; }
+  window.print();
+}
+
+function collectForm(){
+  const ids = ["client","city","area","height","yearBand","climate","type","exposure","wallIns","windows","airtight","roofIns","heat","emitters","controls","dhw","pv","notes"];
+  const o = {};
+  ids.forEach(id=> o[id] = document.getElementById(id).value );
+  return o;
+}
+function applyForm(o){
+  Object.keys(o||{}).forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = o[id];
+  });
+}
+function saveDraft(){
+  localStorage.setItem("qc_energy_draft_v3", JSON.stringify(collectForm()));
+  alert("Bozza salvata su questo dispositivo.");
+}
+function loadDraft(){
+  const raw = localStorage.getItem("qc_energy_draft_v3");
+  if(!raw){ alert("Nessuna bozza salvata."); return; }
+  try{ applyForm(JSON.parse(raw)); alert("Bozza caricata."); }
+  catch(e){ alert("Bozza non valida."); }
+}
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+    });
+  }
+</script>
+
+</body>
+</html>
