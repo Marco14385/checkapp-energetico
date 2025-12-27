@@ -6,6 +6,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>CheckApp Energetico | Screening orientativo</title>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png" type="image/png">
   <meta name="theme-color" content="#0b1020" />
   <link rel="manifest" href="manifest.json" />
   <style>
@@ -457,7 +459,8 @@
         <h2>Prossimo passo</h2>
         <div class="muted">Se vuoi numeri veri: sopralluogo + APE/diagnosi + piano interventi.</div>
         <div class="cta">
-          <a class="btn" id="ctaEmail" href="#" title="Sostituisci l'email nel codice."><span>✉️</span><span>Richiedi sopralluogo / APE</span></a>
+          <a class="btn" id="ctaEmail" href="mailto:marco.hotplay@hotmail.it">Prenota sopralluogo APE (Email)</a>
+          <a class="btn secondary" id="ctaWhatsApp" href="https://wa.me/393463156763" target="_blank" rel="noopener">Prenota su WhatsApp</a>
           <span class="small" id="costHint">—</span>
         </div>
 
@@ -536,7 +539,8 @@ function euroHint(idx, area){
   return `Spesa annua riscaldamento (ordine di grandezza): ~€${est}`;
 }
 function buildMailto(sum){
-  const to = "info@example.com"; // <-- cambia qui
+  const to = "marco.hotplay@hotmail.it";
+  const phone = "+393463156763";
   const subject = encodeURIComponent("Richiesta sopralluogo / APE (CheckApp Energetico)");
   const body = encodeURIComponent(
 `Ciao,
@@ -545,11 +549,29 @@ ho effettuato un CheckApp Energetico orientativo e vorrei un contatto per sopral
 Riepilogo:
 ${JSON.stringify(sum, null, 2)}
 
+Contatto WhatsApp: ${phone}
+
 Note:
 ${v("notes") || "-"}`
   );
   return `mailto:${to}?subject=${subject}&body=${body}`;
 }
+
+function buildWhatsApp(sum){
+  const phone = "393463156763"; // WhatsApp Business (senza +)
+  const text = encodeURIComponent(
+`Ciao Marco, ho fatto un CheckApp Energetico e vorrei prenotare un sopralluogo / APE.
+
+Riepilogo:
+${JSON.stringify(sum, null, 2)}
+
+Note:
+${v("notes") || "-"}`
+  );
+  return `https://wa.me/${phone}?text=${text}`;
+}
+
+
 
 
 function colorForClass(cls){
@@ -653,6 +675,7 @@ function calc(){
   document.getElementById("summary").textContent = JSON.stringify(sum, null, 2);
 
   document.getElementById("ctaEmail").href = buildMailto(sum);
+  document.getElementById("ctaWhatsApp").href = buildWhatsApp(sum);
   document.getElementById("costHint").textContent = euroHint(idx, area);
 
   document.getElementById("printMeta").textContent = new Date().toLocaleString("it-IT");
