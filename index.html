@@ -4,832 +4,428 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CheckApp Energetico</title>
-  <meta name="theme-color" content="#ffffff" />
+
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" href="icon-192.png" />
+  <meta name="theme-color" content="#0b6cff" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    :root{
-      --bg:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --line:#e2e8f0;
-      --card:#ffffff;
-      --shadow: 0 10px 30px rgba(2,6,23,.08);
-      --r:18px;
-      --brand:#0ea5e9;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(14,165,233,.12), transparent 50%),
-                  radial-gradient(900px 450px at 90% 10%, rgba(34,197,94,.10), transparent 55%),
-                  var(--bg);
-      color:var(--text);
-    }
-    .wrap{max-width:1180px;margin:26px auto;padding:0 16px}
-    .topbar{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      padding:14px 16px; background:rgba(255,255,255,.75);
-      border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .brand{display:flex; gap:12px; align-items:center}
-    .brand img{width:46px;height:46px;border-radius:14px;box-shadow:0 6px 16px rgba(2,6,23,.12)}
-    .brand h1{font-size:18px; margin:0; line-height:1.15}
-    .brand p{margin:2px 0 0; font-size:12.5px; color:var(--muted)}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-    .btn{
-      border:1px solid var(--line); background:#fff; color:var(--text);
-      padding:10px 12px; border-radius:14px; cursor:pointer; font-weight:650;
-      box-shadow: 0 8px 18px rgba(2,6,23,.06);
-      display:inline-flex; gap:8px; align-items:center;
-    }
-    .btn.primary{background:linear-gradient(180deg, rgba(14,165,233,.18), rgba(14,165,233,.06)); border-color:rgba(14,165,233,.35)}
-    .btn:active{transform:translateY(1px)}
-    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:16px; margin-top:16px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} .actions{justify-content:flex-start} }
-    .card{
-      background:rgba(255,255,255,.82);
-      border:1px solid var(--line);
-      border-radius:var(--r);
-      box-shadow:var(--shadow);
-      padding:16px;
-      backdrop-filter: blur(8px);
-    }
-    .card h2{margin:0 0 10px; font-size:16px}
-    .note{
-      border:1px dashed rgba(2,6,23,.18);
-      background:rgba(2,6,23,.03);
-      border-radius:14px;
-      padding:10px 12px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
-      margin-bottom:14px;
-    }
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
-    @media (max-width: 680px){ .row{grid-template-columns:1fr} }
-    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px; font-weight:650}
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--text);
-      outline:none;
-      box-shadow: inset 0 1px 0 rgba(2,6,23,.04);
-    }
-    textarea{min-height:84px; resize:vertical}
-    .sep{height:1px;background:var(--line);margin:14px 0}
-    .pillrow{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.9); font-size:13px; font-weight:700;
-      display:inline-flex; gap:8px; align-items:center;
-    }
-    .dot{width:10px;height:10px;border-radius:999px;background:#94a3b8}
-    .big{font-size:18px}
-    .muted{color:var(--muted)}
-    .ok{background:#22c55e}
-    .warn{background:#f59e0b}
-    .bad{background:#ef4444}
-
-    /* scale */
-    .scaleWrap{margin-top:10px}
-    .scale{
-      position:relative;
-      height:22px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      box-shadow: inset 0 1px 0 rgba(2,6,23,.06);
-      background:#fff;
-      display:grid;
-      grid-template-columns: repeat(10, 1fr);
-    }
-    .seg{height:100%}
-    .scaleLabels{
-      display:flex; justify-content:space-between; font-size:11px; color:var(--muted);
-      margin-top:6px; padding:0 2px;
-      user-select:none;
-    }
-    .marker{
-      position:absolute;
-      top:-8px;
-      width:0;height:0;
-      border-left:8px solid transparent;
-      border-right:8px solid transparent;
-      border-top:12px solid #0f172a;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,.18));
-      transform: translateX(-8px);
-    }
-    .readyBox{
-      margin-top:12px;
-      border-radius:16px;
-      padding:12px 12px;
-      border:1px solid var(--line);
-      background:rgba(2,6,23,.02);
-      display:flex; gap:10px; align-items:flex-start;
-    }
-    .readyTitle{font-weight:800; margin:0}
-    .readyText{margin:2px 0 0; color:var(--muted); font-size:13px; line-height:1.35}
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    .ctaRow a{ text-decoration:none }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size:12px;
-      padding:2px 6px;
-      border-radius:8px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--muted);
-    }
-    .tiny{font-size:12px;color:var(--muted);margin-top:8px}
+    :root { --bg:#fff; --text:#0f172a; --muted:#475569; --line:#e2e8f0; --shadow:0 10px 30px rgba(15,23,42,.08); --radius:18px; }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+      background:radial-gradient(1200px 800px at 20% 0%, rgba(11,108,255,.10), transparent 55%),
+                 radial-gradient(1000px 700px at 90% 10%, rgba(0,163,255,.10), transparent 55%), var(--bg);}
+    .wrap{max-width:1200px;margin:0 auto;padding:18px 14px 28px;}
+    .topbar{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);
+      border-radius:var(--radius);background:rgba(255,255,255,.80);backdrop-filter:blur(10px);box-shadow:var(--shadow);
+      position:sticky;top:10px;z-index:5;}
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px;}
+    .brand img{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 16px rgba(15,23,42,.10);background:#fff;}
+    .brand h1{margin:0;font-size:18px;line-height:1.1;}
+    .brand p{margin:3px 0 0;font-size:13px;color:var(--muted);}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+    button{border:1px solid var(--line);background:#fff;color:var(--text);padding:10px 12px;border-radius:14px;cursor:pointer;font-weight:650;
+      box-shadow:0 6px 16px rgba(15,23,42,.06);}
+    button.primary{border-color:rgba(11,108,255,.25);background:linear-gradient(180deg, rgba(11,108,255,.12), rgba(11,108,255,.06));}
+    button:hover{transform:translateY(-1px);} button:active{transform:translateY(0);}
+    .grid{margin-top:14px;display:grid;grid-template-columns:1.05fr .95fr;gap:14px;}
+    @media (max-width:980px){.grid{grid-template-columns:1fr;}.topbar{position:static;}.brand{min-width:0;}}
+    .card{border:1px solid var(--line);border-radius:var(--radius);background:rgba(255,255,255,.85);backdrop-filter:blur(10px);box-shadow:var(--shadow);padding:16px;}
+    .card h2{margin:0 0 10px;font-size:16px;}
+    .note{border:1px dashed rgba(11,108,255,.35);background:rgba(11,108,255,.06);padding:10px 12px;border-radius:14px;color:var(--muted);font-size:13px;}
+    .fields{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;} .fields.one{grid-template-columns:1fr;}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:650;}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff;font-size:14px;outline:none;}
+    textarea{min-height:86px;resize:vertical;}
+    .section-title{margin-top:14px;font-size:13px;color:var(--muted);font-weight:800;letter-spacing:.02em;text-transform:uppercase;}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px;}
+    .pill{border:1px solid var(--line);border-radius:999px;padding:8px 10px;font-size:13px;background:#fff;display:inline-flex;align-items:center;gap:8px;font-weight:700;}
+    .dot{width:10px;height:10px;border-radius:999px;background:#94a3b8;}
+    .band{margin-top:10px;position:relative;height:36px;border-radius:999px;border:1px solid var(--line);overflow:hidden;
+      background:linear-gradient(90deg,#0b7a3d 0%,#1ea34a 10%,#4cc85a 20%,#86d96d 30%,#cfe66b 40%,#f2e85c 50%,#f7cf4d 60%,#f2a23a 70%,#e07b2d 80%,#c84a2a 90%,#b02b2b 100%);}
+    .band .ticks{position:absolute;inset:0;display:grid;grid-template-columns:repeat(11,1fr);align-items:end;padding:0 10px 6px;pointer-events:none;
+      color:rgba(15,23,42,.72);font-size:11px;font-weight:800;text-shadow:0 1px 0 rgba(255,255,255,.65);}
+    .band .ticks span{text-align:center;}
+    .pointer{position:absolute;top:-10px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid #0f172a;
+      filter:drop-shadow(0 6px 10px rgba(0,0,0,.18));transform:translateX(-10px);left:2%;}
+    .box{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;}
+    .cta{display:grid;gap:10px;margin-top:10px;}
+    .cta a{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 14px;border-radius:16px;border:1px solid var(--line);
+      text-decoration:none;font-weight:850;color:var(--text);background:#fff;box-shadow:0 10px 24px rgba(15,23,42,.08);}
+    .cta a.primary{border-color:rgba(11,108,255,.25);background:linear-gradient(180deg, rgba(11,108,255,.14), rgba(11,108,255,.07));}
+    .small{color:var(--muted);font-size:12px;margin-top:8px;}
+    .list{margin:0;padding-left:18px;} .list li{margin:6px 0;}
+    .ready{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:#fff;margin-top:10px;}
+    .badge{font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;white-space:nowrap;}
+    .footer{margin-top:14px;color:var(--muted);font-size:12px;text-align:center;}
+    @media print{.topbar,.footer{display:none;} body{background:#fff;} .wrap{padding:0;} .card{box-shadow:none;backdrop-filter:none;background:#fff;} .grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <img src="icon-192.png" alt="Logo" />
+        <img src="icon-192.png" alt="logo" />
         <div>
           <h1>CheckApp Energetico</h1>
           <p>Screening orientativo + interventi prioritari (non APE). Utile quanto basta per decidere il prossimo passo.</p>
         </div>
       </div>
       <div class="actions">
-        <button class="btn primary" id="btnCalc">⚡ Calcola</button>
-        <button class="btn" id="btnSave">💾 Salva</button>
-        <button class="btn" id="btnLoad">📂 Carica</button>
-        <button class="btn" id="btnPdf">🧾 Report PDF</button>
+        <button id="btnCalc" class="primary">⚡ Calcola</button>
+        <button id="btnSave">💾 Salva</button>
+        <button id="btnLoad">📂 Carica</button>
+        <button id="btnPdf">🧾 Report PDF</button>
       </div>
     </div>
 
     <div class="grid">
       <div class="card">
         <h2>Dati immobile</h2>
-        <div class="note">
-          <b>Disclaimer:</b> output indicativo. Per certificazione APE servono rilievi e calcoli secondo normativa vigente.
-          Qui stimiamo una <span class="kbd">classe</span> e un <span class="kbd">livello criticità</span> per capire dove intervenire prima.
-        </div>
+        <div class="note"><b>Disclaimer:</b> output indicativo. Per certificazione APE servono rilievi e calcoli secondo normativa vigente. Qui stimiamo una <b>classe</b> e un <b>livello di criticità</b>.</div>
 
-        <div class="row">
-          <div>
-            <label>Cliente / riferimento (facoltativo)</label>
-            <input id="cliente" placeholder="Es. Rossi Mario" />
-          </div>
-          <div>
-            <label>Comune (facoltativo)</label>
-            <input id="comune" placeholder="Es. Roma" />
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Superficie (m²)</label>
-            <input id="superficie" type="number" min="10" step="1" value="80" />
-          </div>
-          <div>
-            <label>Altezza media (m)</label>
-            <input id="altezza" type="number" min="2" step="0.1" value="2.7" />
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <label>Anno di costruzione / ristrutturazione principale</label>
-          <select id="anno_banda">
-            <option value="pre70">Prima del 1970</option>
-            <option value="70_90" selected>1970–1990</option>
-            <option value="90_05">1990–2005</option>
-            <option value="05_15">2005–2015</option>
-            <option value="post15">Dopo il 2015</option>
-          </select>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Zona climatica (indicativa)</label>
-            <select id="zona">
-              <option value="A">A</option><option value="B">B</option><option value="C">C</option>
-              <option value="D" selected>D</option><option value="E">E</option><option value="F">F</option>
+        <div class="fields">
+          <div><label>Cliente / riferimento (facoltativo)</label><input id="cliente" placeholder="Es. Rossi Mario" /></div>
+          <div><label>Comune (facoltativo)</label><input id="comune" placeholder="Es. Roma" /></div>
+          <div><label>Superficie (m²)</label><input id="superficie" type="number" value="80" min="10" /></div>
+          <div><label>Altezza media (m)</label><input id="altezza" type="number" value="2.7" min="2" step="0.1" /></div>
+          <div style="grid-column:1/-1;">
+            <label>Anno di costruzione / ristrutturazione principale</label>
+            <select id="anno">
+              <option value="post2015">2015+</option>
+              <option value="2006_2014">2006–2014</option>
+              <option value="1991_2005">1991–2005</option>
+              <option value="1970_1990" selected>1970–1990</option>
+              <option value="pre70">Prima del 1970</option>
             </select>
           </div>
-          <div>
-            <label>Orientamento prevalente</label>
-            <select id="orientamento">
-              <option value="N">Nord</option>
-              <option value="E">Est</option>
-              <option value="S" selected>Sud</option>
-              <option value="W">Ovest</option>
-              <option value="mix">Misto</option>
-            </select>
+          <div><label>Zona climatica (indicativa)</label>
+            <select id="zona"><option>A</option><option>B</option><option>C</option><option selected>D</option><option>E</option><option>F</option></select>
+          </div>
+          <div><label>Orientamento prevalente</label>
+            <select id="orientamento"><option value="N">Nord</option><option value="E">Est</option><option value="S" selected>Sud</option><option value="O">Ovest</option><option value="NE">Nord-Est</option><option value="NO">Nord-Ovest</option><option value="SE">Sud-Est</option><option value="SO">Sud-Ovest</option></select>
+          </div>
+          <div><label>Tipologia</label>
+            <select id="tipologia"><option value="appartamento" selected>Appartamento</option><option value="villa">Villetta / Unifamiliare</option><option value="ufficio">Ufficio</option></select>
+          </div>
+          <div><label>Posizione</label>
+            <select id="posizione"><option value="intermedio" selected>Intermedio</option><option value="ultimo">Ultimo piano</option><option value="terra">Piano terra</option><option value="attico">Attico</option></select>
           </div>
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Tipologia</label>
-            <select id="tipologia">
-              <option value="apartment" selected>Appartamento</option>
-              <option value="single">Villetta / unifamiliare</option>
-              <option value="multi">Plurifamiliare</option>
-            </select>
-          </div>
-          <div>
-            <label>Posizione</label>
-            <select id="posizione">
-              <option value="intermedio" selected>Intermedio</option>
-              <option value="piano_terra">Piano terra</option>
-              <option value="ultimo">Ultimo piano</option>
-              <option value="angolo">Angolare / molta esposizione</option>
-            </select>
-          </div>
+        <div class="section-title">Aperture</div>
+        <div class="fields">
+          <div><label>Numero finestre</label><input id="num_finestre" type="number" value="6" min="0" /></div>
+          <div><label>Numero porte-finestra</label><input id="num_portefinestre" type="number" value="1" min="0" /></div>
         </div>
 
-        <div class="sep"></div>
-        <h2>Involucro</h2>
-
-        <div class="row">
-          <div>
-            <label>Isolamento pareti</label>
-            <select id="pareti">
-              <option value="none" selected>Assente / minimo</option>
-              <option value="some">Parziale</option>
-              <option value="good">Buono</option>
-            </select>
-          </div>
-          <div>
-            <label>Copertura / solaio verso esterno</label>
-            <select id="copertura">
-              <option value="none">Assente</option>
-              <option value="some" selected>Parziale</option>
-              <option value="good">Buono</option>
-            </select>
-          </div>
+        <div class="section-title">Involucro</div>
+        <div class="fields">
+          <div><label>Isolamento pareti</label><select id="pareti"><option value="buono">Buono</option><option value="medio">Medio</option><option value="scarso" selected>Assente / minimo</option></select></div>
+          <div><label>Copertura / solaio verso esterno</label><select id="copertura"><option value="buona">Buona</option><option value="media" selected>Parziale</option><option value="scarsa">Assente</option></select></div>
+          <div><label>Materiale infissi</label><select id="infissi_mat"><option value="pvc" selected>PVC</option><option value="legno">Legno</option><option value="alluminio">Alluminio</option></select></div>
+          <div><label>Taglio termico (solo alluminio)</label><select id="taglio_termico" disabled><option value="si">Sì</option><option value="no" selected>No</option></select></div>
+          <div style="grid-column:1/-1;"><label>Vetri</label><select id="vetri"><option value="singolo">Singolo vetro</option><option value="doppio_vecchio" selected>Doppio vecchio</option><option value="doppio_bassoem">Doppio basso-emissivo</option><option value="triplo">Triplo</option></select></div>
+          <div><label>Tenuta aria (spifferi)</label><select id="aria"><option value="buona">Buona</option><option value="media">Media</option><option value="scarsa" selected>Scarsa</option></select></div>
+          <div><label>Ombreggiamento</label><select id="ombreggiamento"><option value="si">Sì</option><option value="no" selected>No</option></select></div>
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Infissi: materiale</label>
-            <select id="infissi_materiale">
-              <option value="old" selected>Vecchi / singolo vetro</option>
-              <option value="pvc">PVC</option>
-              <option value="wood">Legno</option>
-              <option value="al">Alluminio</option>
-            </select>
-          </div>
-          <div>
-            <label>Alluminio: taglio termico?</label>
-            <select id="taglio_termico">
-              <option value="na" selected>Non applicabile</option>
-              <option value="no">No</option>
-              <option value="yes">Sì</option>
-            </select>
-          </div>
+        <div class="section-title">Impianti</div>
+        <div class="fields">
+          <div><label>Riscaldamento</label><select id="riscaldamento"><option value="assente">Assente</option><option value="centralizzato" selected>Condominiale / centralizzato</option><option value="autonomo_caldaia">Autonomo caldaia</option><option value="pdc">Pompa di calore (PDC)</option><option value="altro">Altro</option></select></div>
+          <div><label>Terminali</label><select id="terminali"><option value="radiatori" selected>Radiatori</option><option value="fan_coil">Fan-coil</option><option value="pavimento">Pavimento radiante</option><option value="aria">Aria (canalizzato)</option></select></div>
+          <div><label>Raffrescamento presente?</label><select id="raffrescamento"><option value="no" selected>No</option><option value="si">Sì</option></select></div>
+          <div><label>Tipo raffrescamento</label><select id="raff_tipo" disabled><option value="pdc">PDC</option><option value="chiller">Chiller</option><option value="dx">Espansione diretta</option></select></div>
+          <div><label>ACS</label><select id="acs"><option value="gas" selected>Gas</option><option value="pdc">PDC / boiler HP</option><option value="elettrico">Elettrico</option><option value="solare">Solare termico</option></select></div>
+          <div><label>Fotovoltaico</label><select id="fv"><option value="no" selected>No</option><option value="si">Sì</option></select></div>
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Numero finestre</label>
-            <input id="num_finestre" type="number" min="0" step="1" value="6" />
-          </div>
-          <div>
-            <label>Numero porte-finestre</label>
-            <input id="num_portefinestre" type="number" min="0" step="1" value="1" />
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <label>Tenuta all’aria (spifferi)</label>
-          <select id="tenuta_aria">
-            <option value="poor" selected>Scarsa</option>
-            <option value="avg">Media</option>
-            <option value="good">Buona</option>
-          </select>
-        </div>
-
-        <div class="sep"></div>
-        <h2>Impianti</h2>
-
-        <div class="row">
-          <div>
-            <label>Riscaldamento</label>
-            <select id="riscaldamento">
-              <option value="none">Assente / stufe</option>
-              <option value="old">Caldaia tradizionale</option>
-              <option value="condensing" selected>Caldaia a condensazione</option>
-              <option value="hp">Pompa di calore (PDC)</option>
-            </select>
-          </div>
-          <div>
-            <label>Riscaldamento condominiale?</label>
-            <select id="condominiale">
-              <option value="no" selected>No</option>
-              <option value="yes">Sì</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Raffrescamento presente?</label>
-            <select id="raffrescamento">
-              <option value="no" selected>No</option>
-              <option value="yes">Sì</option>
-            </select>
-          </div>
-          <div>
-            <label>Tipo raffrescamento</label>
-            <select id="raff_tipo">
-              <option value="na" selected>—</option>
-              <option value="dx">Espansione diretta (split / motocondensante)</option>
-              <option value="chiller">Chiller</option>
-              <option value="hp">PDC (reversibile)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Terminali</label>
-            <select id="terminali">
-              <option value="radiators" selected>Radiatori</option>
-              <option value="floor">Pavimento radiante</option>
-              <option value="fancoil">Fancoil</option>
-              <option value="mixed">Misti</option>
-            </select>
-          </div>
-          <div>
-            <label>Regolazione</label>
-            <select id="regolazione">
-              <option value="none">Assente</option>
-              <option value="basic" selected>Termostato base</option>
-              <option value="smart">Smart / zonale</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>ACS (acqua calda sanitaria)</label>
-            <select id="acs">
-              <option value="old">Scaldabagno elettrico / vecchio</option>
-              <option value="condensing" selected>Da caldaia</option>
-              <option value="hp">PDC / bollitore in pompa di calore</option>
-              <option value="solar">Solare termico</option>
-            </select>
-          </div>
-          <div>
-            <label>Fotovoltaico</label>
-            <select id="fotovoltaico">
-              <option value="none" selected>Assente</option>
-              <option value="small">Piccolo (&lt;3 kWp)</option>
-              <option value="mid">Medio (3–6 kWp)</option>
-              <option value="big">Grande (&gt;6 kWp)</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <label>Note (facoltative)</label>
-          <textarea id="note" placeholder="Esempio: ultimo piano senza cappotto, infissi nuovi 2021, split recenti..."></textarea>
-        </div>
-
-        <div class="tiny">Suggerimento: dopo le modifiche, premi <span class="kbd">Calcola</span> e poi <span class="kbd">Salva</span>.</div>
+        <div class="section-title">Note</div>
+        <div class="fields one"><div><label>Note (facoltative)</label><textarea id="note" placeholder="Es. vincoli condominiali, budget, obiettivi, ecc."></textarea></div></div>
       </div>
 
       <div class="card">
         <h2>Risultato</h2>
-        <div class="pillrow" style="margin-bottom:10px">
-          <div class="pill"><span class="dot" id="dotState"></span> <span id="stateText">In attesa di calcolo</span></div>
-          <div class="pill">Indice: <span class="big" id="indice">—</span></div>
-          <div class="pill">Classe: <span class="big" id="classe">—</span></div>
-          <div class="pill">Volume: <span class="big" id="volume">—</span> m³</div>
+
+        <div class="pillrow">
+          <span class="pill"><span id="statusDot" class="dot"></span><span id="statusText">In attesa di calcolo</span></span>
+          <span class="pill">Indice: <span id="indiceTxt">—</span></span>
+          <span class="pill">Classe: <span id="classeTxt">—</span></span>
+          <span class="pill">Volume: <span id="volTxt">—</span> m³</span>
         </div>
 
-        <div class="scaleWrap">
-          <div class="scale" id="scale">
-            <div class="seg" style="background:#0b8a3a"></div>
-            <div class="seg" style="background:#1e9b43"></div>
-            <div class="seg" style="background:#43b047"></div>
-            <div class="seg" style="background:#78c850"></div>
-            <div class="seg" style="background:#b9d84b"></div>
-            <div class="seg" style="background:#f0e24b"></div>
-            <div class="seg" style="background:#f2c24a"></div>
-            <div class="seg" style="background:#e68b3b"></div>
-            <div class="seg" style="background:#d55a3a"></div>
-            <div class="seg" style="background:#c92f2f"></div>
-            <div class="marker" id="marker" style="left:5%"></div>
+        <div class="band">
+          <div id="pointer" class="pointer"></div>
+          <div class="ticks"><span>NZEB</span><span>A4</span><span>A3</span><span>A2</span><span>A1</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span></div>
+        </div>
+
+        <div class="ready">
+          <span class="badge" id="readyBadge">2030: non calcolato</span>
+          <div style="color:var(--muted);font-size:13px;" id="readyText">Compila i dati e premi Calcola.</div>
+        </div>
+
+        <div class="section-title">Interventi consigliati</div>
+        <div class="box"><ul class="list" id="interventiList"><li>—</li></ul></div>
+
+        <div class="section-title">Prossimo passo</div>
+        <div class="box">
+          Se vuoi numeri veri: sopralluogo + APE/diagnosi + piano interventi.
+          <div class="cta">
+            <a id="ctaEmail" class="primary" href="#">📩 Prenota sopralluogo (Email)</a>
+            <a id="ctaWa" href="#">💬 Prenota su WhatsApp</a>
           </div>
-          <div class="scaleLabels">
-            <span>NZEB</span><span>A4</span><span>A3</span><span>A2</span><span>A1</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span>
-          </div>
+          <div class="small">Email: <b id="mailShow">marco.hotplay@hotmail.it</b> · WhatsApp Business: <b>+39 346 315 6763</b></div>
         </div>
 
-        <div class="readyBox" id="readyBox">
-          <span class="dot" id="readyDot"></span>
-          <div>
-            <p class="readyTitle" id="readyTitle">2030: non calcolato</p>
-            <p class="readyText" id="readyText">Compila i dati e premi Calcola.</p>
-          </div>
-        </div>
-
-        <div class="sep"></div>
-        <h2>Interventi consigliati</h2>
-        <div id="interventi" class="muted">—</div>
-
-        <div class="sep"></div>
-        <h2>Prossimo passo</h2>
-        <p class="muted" style="margin:0 0 10px">Se vuoi numeri veri: sopralluogo + APE/diagnosi + piano interventi.</p>
-        <div class="ctaRow">
-          <a class="btn primary" id="ctaEmail" href="#">📧 Prenota sopralluogo (Email)</a>
-          <a class="btn" id="ctaWapp" href="#" target="_blank" rel="noopener">💬 Prenota su WhatsApp</a>
-        </div>
-        <div class="tiny">Email: <span class="kbd">marco.hotplay@hotmail.it</span> · WhatsApp Business: <span class="kbd">+39 346 315 6763</span></div>
+        <div class="footer">Versione: <span id="ver">v13-1766950936</span> · Offline: sì (PWA)</div>
       </div>
     </div>
   </div>
 
   <script>
-    // PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
-    }
+  "use strict";
+const EMAIL_TO="marco.hotplay@hotmail.it";
+const WA_NUMBER="393463156763";
+const VERSION="v13-1766950936";
 
-    const $ = (id) => document.getElementById(id);
+const $=(id)=>document.getElementById(id);
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const CLASSES=["NZEB","A4","A3","A2","A1","B","C","D","E","F","G"];
 
-    const CLASSES = ["NZEB","A4","A3","A2","A1","B","C","D","E","F","G"];
+function volume(){const s=parseFloat($("superficie").value||"0"); const h=parseFloat($("altezza").value||"0"); return Math.round((s*h)*10)/10;}
+function classFromScore(score){
+  const s=clamp(score,0,100);
+  if(s<=5)return"NZEB"; if(s<=12)return"A4"; if(s<=18)return"A3"; if(s<=25)return"A2"; if(s<=33)return"A1";
+  if(s<=42)return"B"; if(s<=52)return"C"; if(s<=63)return"D"; if(s<=75)return"E"; if(s<=88)return"F"; return"G";
+}
+function positionForClass(cls){const i=CLASSES.indexOf(cls); const idx=i<0?10:i; return 2+(idx*(96/10));}
 
-    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function computeScore(){
+  const year=$("anno").value, zona=$("zona").value;
+  let score=40;
+  if(year==="post2015")score-=18; else if(year==="2006_2014")score-=10; else if(year==="1991_2005")score-=2; else if(year==="1970_1990")score+=8; else if(year==="pre70")score+=18;
+  const zonePenalty={A:-4,B:-2,C:2,D:6,E:10,F:14}[zona] ?? 6; score+=zonePenalty;
 
-    function computeScore(d){
-      let score = 0;
+  const pareti=$("pareti").value, cop=$("copertura").value, aria=$("aria").value, vetri=$("vetri").value;
+  score += (pareti==="buono")?-10:(pareti==="medio"?-4:10);
+  score += (cop==="buona")?-6:(cop==="media"?2:8);
+  score += (aria==="buona")?-6:(aria==="media"?2:8);
+  score += (vetri==="triplo")?-8:(vetri==="doppio_bassoem"?-5:(vetri==="doppio_vecchio"?2:10));
 
-      // anno
-      const annoW = {pre70:18, "70_90":14, "90_05":10, "05_15":6, post15:2};
-      score += (annoW[d.anno_banda] ?? 10);
+  const mat=$("infissi_mat").value;
+  if(mat==="pvc")score-=2;
+  if(mat==="legno")score-=1;
+  if(mat==="alluminio"){const tt=$("taglio_termico").value; score += (tt==="si")?1:8;}
 
-      // zona climatica
-      const zonaW = {A:2, B:4, C:7, D:10, E:13, F:16};
-      score += (zonaW[d.zona] ?? 10);
+  const ori=$("orientamento").value, shade=$("ombreggiamento").value;
+  if(["S","SO","SE","O"].includes(ori) && shade==="no")score+=3;
+  if(["N","NE","NO"].includes(ori))score+=1;
 
-      // tipologia/posizione
-      const posW = {intermedio:2, piano_terra:6, ultimo:8, angolo:9};
-      score += (posW[d.posizione] ?? 6);
-      if (d.tipologia !== "apartment") score += 5;
+  const nfin=parseInt($("num_finestre").value||"0",10);
+  const npf=parseInt($("num_portefinestre").value||"0",10);
+  const openings=clamp(nfin+(npf*2),0,30);
+  score += clamp((openings-6)*0.6,-4,10);
 
-      // orientamento
-      const oriW = {N:6, E:3, S:2, W:4, mix:3};
-      score += (oriW[d.orientamento] ?? 3);
+  const ris=$("riscaldamento").value, term=$("terminali").value, raff=$("raffrescamento").value, raffTipo=$("raff_tipo").value;
+  const acs=$("acs").value, fv=$("fv").value;
 
-      // involucro
-      const insW = {none:18, some:10, good:3};
-      score += (insW[d.pareti] ?? 12);
-      score += (insW[d.copertura] ?? 12);
+  if(ris==="assente")score+=6;
+  if(ris==="centralizzato")score+=2;
+  if(ris==="autonomo_caldaia")score+=3;
+  if(ris==="pdc")score-=6;
 
-      // infissi/materiale
-      // old = pesante, pvc/legno medi, alluminio dipende dal taglio termico
-      if (d.infissi_materiale === "old") score += 16;
-      if (d.infissi_materiale === "pvc") score += 6;
-      if (d.infissi_materiale === "wood") score += 7;
-      if (d.infissi_materiale === "al") {
-        score += (d.taglio_termico === "yes") ? 7 : 13;
-      }
-      // tenuta aria
-      const airW = {poor:10, avg:6, good:2};
-      score += (airW[d.tenuta_aria] ?? 6);
+  if(term==="pavimento")score-=2;
+  if(term==="fan_coil")score-=1;
 
-      // superfici vetrate proxy: finestre/porte-finestre
-      const nwin = clamp((d.num_finestre||0) + (d.num_portefinestre||0)*1.6, 0, 30);
-      score += clamp(nwin * 0.6, 0, 12);
+  if(raff==="si"){
+    if(raffTipo==="pdc")score-=1;
+    if(raffTipo==="chiller")score+=2;
+    if(raffTipo==="dx")score+=1;
+  }
 
-      // impianti riscaldamento
-      const heatW = {none:18, old:12, condensing:6, hp:3};
-      score += (heatW[d.riscaldamento] ?? 10);
-      if (d.condominiale === "yes") score += 2; // spesso meno regolabile
+  if(acs==="pdc")score-=3;
+  if(acs==="solare")score-=4;
+  if(acs==="elettrico")score+=2;
+  if(fv==="si")score-=6;
 
-      // raffrescamento
-      if (d.raffrescamento === "yes"){
-        const coolW = {dx:5, chiller:7, hp:3};
-        score += (coolW[d.raff_tipo] ?? 5);
-      }
+  const pos=$("posizione").value;
+  if(pos==="ultimo"||pos==="attico")score+=4;
+  if(pos==="terra")score+=2;
 
-      // terminali / regolazione / ACS
-      const termW = {radiators:6, fancoil:5, floor:3, mixed:6};
-      score += (termW[d.terminali] ?? 5);
+  return Math.round(clamp(score,0,100));
+}
 
-      const regW = {none:6, basic:3, smart:0};
-      score += (regW[d.regolazione] ?? 3);
+function interventions(d){
+  const out=[];
+  if(d.pareti==="scarso") out.push("Isolamento pareti (cappotto mirato o insufflaggio): riduce dispersioni e migliora comfort.");
+  if(d.aria==="scarsa") out.push("Tenuta all’aria: guarnizioni, cassonetti, sigillature (spesso low-cost, alta resa).");
+  if(["singolo","doppio_vecchio"].includes(d.vetri)) out.push("Upgrade vetri/infissi: basso emissivo + posa corretta (ponti termici).");
+  if(d.copertura==="scarsa"||d.copertura==="media") out.push("Coibentazione copertura/solaio verso esterno: prioritaria se ultimo piano/attico.");
+  if(d.riscaldamento!=="pdc") out.push("Valuta PDC (dove possibile): taglia consumi e prepara l’immobile alla decarbonizzazione.");
+  if(d.fv==="no") out.push("Fotovoltaico (se fattibile): supporta consumi e futura PDC/raffrescamento.");
+  if(d.raffrescamento==="si" && d.raff_tipo==="chiller") out.push("Raffrescamento: verifica efficienza chiller e regolazione (spesso margine enorme).");
+  if(d.raffrescamento==="si" && d.raff_tipo==="dx") out.push("Raffrescamento DX: manutenzione + corretto dimensionamento/posa per evitare sprechi.");
+  if(out.length===0) out.push("Nessuna criticità evidente: verifica comunque con diagnosi/sopralluogo se vuoi numeri reali.");
+  return out.slice(0,8);
+}
 
-      const acsW = {old:7, condensing:3, hp:1, solar:0};
-      score += (acsW[d.acs] ?? 3);
+function isReady2030(cls){return CLASSES.indexOf(cls) < CLASSES.indexOf("D");}
 
-      // FV
-      const pvW = {none:6, small:4, mid:2, big:0};
-      score += (pvW[d.fotovoltaico] ?? 4);
+function syncLogic(){
+  const mat=$("infissi_mat").value;
+  $("taglio_termico").disabled = (mat!=="alluminio");
+  if(mat!=="alluminio") $("taglio_termico").value="no";
 
-      // normalizza 0-100-ish
-      score = clamp(Math.round(score), 0, 120);
-      return score;
-    }
+  const r=$("raffrescamento").value;
+  $("raff_tipo").disabled = (r!=="si");
+  if(r!=="si") $("raff_tipo").value="pdc";
+}
 
-    function scoreToClass(score){
-      // più score = peggio. soglie indicative
-      if (score <= 10) return "NZEB";
-      if (score <= 16) return "A4";
-      if (score <= 22) return "A3";
-      if (score <= 30) return "A2";
-      if (score <= 38) return "A1";
-      if (score <= 48) return "B";
-      if (score <= 60) return "C";
-      if (score <= 72) return "D";
-      if (score <= 86) return "E";
-      if (score <= 100) return "F";
-      return "G";
-    }
+function collect(){
+  return {
+    cliente:$("cliente").value.trim(),
+    comune:$("comune").value.trim(),
+    superficie:$("superficie").value, altezza:$("altezza").value,
+    anno:$("anno").value, zona:$("zona").value, orientamento:$("orientamento").value,
+    tipologia:$("tipologia").value, posizione:$("posizione").value,
+    num_finestre:$("num_finestre").value, num_portefinestre:$("num_portefinestre").value,
+    pareti:$("pareti").value, copertura:$("copertura").value,
+    infissi_mat:$("infissi_mat").value, taglio_termico:$("taglio_termico").value,
+    vetri:$("vetri").value, aria:$("aria").value, ombreggiamento:$("ombreggiamento").value,
+    riscaldamento:$("riscaldamento").value, terminali:$("terminali").value,
+    raffrescamento:$("raffrescamento").value, raff_tipo:$("raff_tipo").value,
+    acs:$("acs").value, fv:$("fv").value,
+    note:$("note").value.trim(), _version:VERSION
+  };
+}
 
-    function classLabel(c){
-      if (c === "G") return "G (Critica)";
-      if (c === "F") return "F (Molto bassa)";
-      if (c === "E") return "E (Bassa)";
-      if (c === "D") return "D (Migliorabile)";
-      if (c === "C") return "C (Buona)";
-      if (c === "B") return "B (Molto buona)";
-      if (c.startsWith("A") || c === "NZEB") return c + " (Alta)";
-      return c;
-    }
+function apply(d){
+  Object.keys(d||{}).forEach(k=>{const el=$(k); if(el) el.value=d[k];});
+  syncLogic(); setCtas();
+}
 
-    function setMarker(cls){
-      const idx = CLASSES.indexOf(cls);
-      const pct = ((idx)/(CLASSES.length-1)) * 100; // 0..100
-      $("marker").style.left = pct + "%";
-    }
+function setCtas(){
+  const subject=encodeURIComponent("Prenotazione sopralluogo / APE");
+  const body=encodeURIComponent(
+    "Ciao Marco,\n\nVorrei prenotare un sopralluogo/APE.\n\nDati immobile (se li hai):\n- Comune: "+($("comune").value||"")+
+    "\n- Superficie: "+($("superficie").value||"")+" m²\n- Note: "+($("note").value||"")+"\n\nGrazie!"
+  );
+  $("ctaEmail").href=`mailto:${EMAIL_TO}?subject=${subject}&body=${body}`;
+  const waText=encodeURIComponent("Ciao Marco, vorrei prenotare un sopralluogo/APE. Comune: "+($("comune").value||"")+", superficie: "+($("superficie").value||"")+" m².");
+  $("ctaWa").href=`https://wa.me/${WA_NUMBER}?text=${waText}`;
+}
 
-    function buildInterventi(d, cls){
-      const out = [];
-      if (d.pareti !== "good") out.push("Isolamento pareti (cappotto mirato): riduce dispersioni e migliora comfort.");
-      if (d.copertura !== "good") out.push("Isolamento copertura/solaio verso esterno: spesso alto rendimento €/kWh.");
-      if (d.tenuta_aria === "poor") out.push("Tenuta all’aria: guarnizioni, cassonetti, sigillature (spesso low-cost, alta resa).");
-      if (d.infissi_materiale === "old" || (d.infissi_materiale==="al" && d.taglio_termico!=="yes")) out.push("Infissi: valutare sostituzione o retrofit (vetro/guarnizioni) dove ha più senso.");
-      if (d.riscaldamento === "old" || d.riscaldamento === "none") out.push("Generatore: passare a condensazione o PDC (compatibilmente con impianto e potenze).");
-      if (d.regolazione !== "smart") out.push("Regolazione: valvole termostatiche / cronotermostato / zonale smart.");
-      if (d.fotovoltaico === "none") out.push("Fotovoltaico: se fattibile, anche piccolo supporta consumi e futura PDC.");
-      if (d.raffrescamento === "yes" && d.raff_tipo === "chiller") out.push("Raffrescamento: verificare efficienza chiller e strategie di regolazione/terminali.");
-      if (out.length === 0) out.push("Nessuna criticità evidente. Sì, ogni tanto succede.");
-      return "<ul>" + out.map(x=>`<li>${x}</li>`).join("") + "</ul>";
-    }
+function calc(){
+  syncLogic();
+  const v=volume(); $("volTxt").textContent=String(v);
+  const score=computeScore(); const cls=classFromScore(score);
+  $("indiceTxt").textContent=String(score); $("classeTxt").textContent=cls;
+  $("statusDot").style.background = (score<=42)?"#16a34a":(score<=63?"#f59e0b":"#ef4444");
+  $("statusText").textContent = (score<=42)?"Buono":(score<=63?"Medio":"Critico");
+  $("pointer").style.left = positionForClass(cls)+"%";
 
-    function gather(){
-      const d = {
-        cliente: $("cliente").value.trim(),
-        comune: $("comune").value.trim(),
-        superficie_mq: Number($("superficie").value || 0),
-        altezza_m: Number($("altezza").value || 0),
-        anno_banda: $("anno_banda").value,
-        zona: $("zona").value,
-        orientamento: $("orientamento").value,
-        tipologia: $("tipologia").value,
-        posizione: $("posizione").value,
-        pareti: $("pareti").value,
-        copertura: $("copertura").value,
-        infissi_materiale: $("infissi_materiale").value,
-        taglio_termico: $("taglio_termico").value,
-        num_finestre: Number($("num_finestre").value || 0),
-        num_portefinestre: Number($("num_portefinestre").value || 0),
-        tenuta_aria: $("tenuta_aria").value,
-        riscaldamento: $("riscaldamento").value,
-        condominiale: $("condominiale").value,
-        raffrescamento: $("raffrescamento").value,
-        raff_tipo: $("raff_tipo").value,
-        terminali: $("terminali").value,
-        regolazione: $("regolazione").value,
-        acs: $("acs").value,
-        fotovoltaico: $("fotovoltaico").value,
-        note: $("note").value.trim(),
-      };
-      return d;
-    }
+  const ready=isReady2030(cls);
+  $("readyBadge").textContent = ready?"2030: OK":"2030: NON OK";
+  $("readyBadge").style.borderColor = ready?"rgba(22,163,74,.35)":"rgba(239,68,68,.35)";
+  $("readyBadge").style.background = ready?"rgba(22,163,74,.06)":"rgba(239,68,68,.06)";
+  $("readyText").textContent = ready
+    ? "Se resti almeno in classe C (o meglio), sei dentro alla logica 'pronto'."
+    : "Se resti in D/E/F/G, serve un piano interventi per arrivare almeno a C.";
 
-    function apply(d){
-      $("cliente").value = d.cliente ?? "";
-      $("comune").value = d.comune ?? "";
-      $("superficie").value = d.superficie_mq ?? 80;
-      $("altezza").value = d.altezza_m ?? 2.7;
-      $("anno_banda").value = d.anno_banda ?? "70_90";
-      $("zona").value = d.zona ?? "D";
-      $("orientamento").value = d.orientamento ?? "S";
-      $("tipologia").value = d.tipologia ?? "apartment";
-      $("posizione").value = d.posizione ?? "intermedio";
-      $("pareti").value = d.pareti ?? "none";
-      $("copertura").value = d.copertura ?? "some";
-      $("infissi_materiale").value = d.infissi_materiale ?? "old";
-      $("taglio_termico").value = d.taglio_termico ?? "na";
-      $("num_finestre").value = d.num_finestre ?? 6;
-      $("num_portefinestre").value = d.num_portefinestre ?? 1;
-      $("tenuta_aria").value = d.tenuta_aria ?? "poor";
-      $("riscaldamento").value = d.riscaldamento ?? "condensing";
-      $("condominiale").value = d.condominiale ?? "no";
-      $("raffrescamento").value = d.raffrescamento ?? "no";
-      $("raff_tipo").value = d.raff_tipo ?? "na";
-      $("terminali").value = d.terminali ?? "radiators";
-      $("regolazione").value = d.regolazione ?? "basic";
-      $("acs").value = d.acs ?? "condensing";
-      $("fotovoltaico").value = d.fotovoltaico ?? "none";
-      $("note").value = d.note ?? "";
-    }
+  const data=collect();
+  const list=interventions(data);
+  const ul=$("interventiList"); ul.innerHTML="";
+  list.forEach(it=>{const li=document.createElement("li"); li.textContent=it; ul.appendChild(li);});
+  setCtas();
+  return {score,cls,v,data,list,ready};
+}
 
-    function setStatus(kind, text){
-      const dot = $("dotState");
-      dot.className = "dot " + (kind==="ok"?"ok":kind==="warn"?"warn":kind==="bad"?"bad":"");
-      $("stateText").textContent = text;
-    }
+function saveDraft(){localStorage.setItem("checkapp_energetico_draft", JSON.stringify(collect())); alert("Salvato sul dispositivo.");}
+function loadDraft(){const raw=localStorage.getItem("checkapp_energetico_draft"); if(!raw) return alert("Nessun salvataggio trovato.");
+  try{apply(JSON.parse(raw)); alert("Caricato.");}catch{alert("Salvataggio non leggibile (vecchio/corrotto).");}}
 
-    function calcola(){
-      const d = gather();
-      const vol = Math.max(0, Math.round((d.superficie_mq||0) * (d.altezza_m||0)));
-      const score = computeScore(d);
-      const cls = scoreToClass(score);
+function reportPDF(){
+  const res=calc(); const d=res.data;
+  const base=location.href.replace(/\?.*$/,"").replace(/index\.html$/,"");
+  const logoUrl=base+"icon-192.png";
+  const safe=(s)=>String(s||"—").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const ptrLeft=positionForClass(res.cls);
 
-      $("volume").textContent = vol ? String(vol) : "—";
-      $("indice").textContent = String(score) + "/120";
-      $("classe").textContent = classLabel(cls);
-
-      setMarker(cls);
-
-      // Stato
-      if (["NZEB","A4","A3","A2","A1","B","C"].includes(cls)) setStatus("ok","Buono (ma non cantare vittoria)");
-      else if (cls === "D") setStatus("warn","Migliorabile");
-      else setStatus("bad","Criticità alta");
-
-      // 2030 readyness (messaggio orientativo)
-      const ready = ["NZEB","A4","A3","A2","A1","B","C","D"].includes(cls);
-      $("readyDot").className = "dot " + (ready ? "ok" : "bad");
-      $("readyTitle").textContent = ready ? "2030: tendenzialmente OK (≥D)" : "2030: NON OK (<D)";
-      $("readyText").textContent = ready
-        ? "Se l’obiettivo è stare almeno in D, questa stima non suona male. Per una risposta seria: rilievo + calcolo."
-        : "Con questa stima sei sotto D: conviene pianificare interventi. Il che è divertente solo per chi vende cappotti.";
-
-      $("interventi").innerHTML = buildInterventi(d, cls);
-
-      // CTA links
-      const email = "marco.hotplay@hotmail.it";
-      const phone = "+393463156763";
-      const subject = encodeURIComponent("Prenotazione sopralluogo APE / diagnosi energetica");
-      const body = encodeURIComponent(
-        "Ciao Marco,%0D%0A%0D%0A" +
-        "Vorrei prenotare un sopralluogo.%0D%0A" +
-        "Dati (indicativi):%0D%0A" +
-        "- Comune: " + (d.comune||"") + "%0D%0A" +
-        "- Superficie: " + (d.superficie_mq||"") + " m²%0D%0A" +
-        "- Classe stimata: " + cls + "%0D%0A" +
-        "- Note: " + (d.note||"") + "%0D%0A%0D%0A" +
-        "Contatto telefonico:%0D%0A"
-      );
-      $("ctaEmail").href = `mailto:${email}?subject=${subject}&body=${body}`;
-      const wmsg = encodeURIComponent(`Ciao Marco, vorrei prenotare un sopralluogo. Comune: ${d.comune||""}, sup: ${d.superficie_mq||""} m², classe stimata: ${cls}.`);
-      $("ctaWapp").href = `https://wa.me/${phone.replace("+","")}?text=${wmsg}`;
-    }
-
-    function saveDraft(){
-      const d = gather();
-      localStorage.setItem("checkappEnergetico:v11", JSON.stringify(d));
-      setStatus("ok","Salvato sul dispositivo");
-    }
-
-    function loadDraft(){
-      const raw = localStorage.getItem("checkappEnergetico:v11");
-      if (!raw){ setStatus("warn","Nessun salvataggio trovato"); return; }
-      try{
-        const d = JSON.parse(raw);
-        apply(d);
-        setStatus("ok","Caricato");
-      }catch(e){
-        setStatus("bad","Salvataggio corrotto");
-      }
-    }
-
-    function reportPDF(){
-      // genera un report HTML stampabile (l’utente poi salva in PDF)
-      const d = gather();
-      const score = computeScore(d);
-      const cls = scoreToClass(score);
-      const vol = Math.max(0, Math.round((d.superficie_mq||0) * (d.altezza_m||0)));
-
-      const interventions = buildInterventi(d, cls);
-      const ready = ["NZEB","A4","A3","A2","A1","B","C","D"].includes(cls);
-
-      const html = `
-<!doctype html>
-<html lang="it">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Report CheckApp Energetico</title>
-<style>
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:28px;color:#0f172a}
-  .hdr{display:flex;gap:14px;align-items:center}
-  .logo{width:54px;height:54px;border-radius:16px;box-shadow:0 6px 18px rgba(2,6,23,.12)}
-  h1{margin:0;font-size:20px}
-  .muted{color:#475569}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
-  .card{border:1px solid #e2e8f0;border-radius:16px;padding:14px}
-  .k{font-size:12px;color:#475569;font-weight:700}
-  .v{font-size:16px;font-weight:800;margin-top:2px}
-  .scale{margin-top:12px;border:1px solid #e2e8f0;border-radius:999px;overflow:hidden;height:18px;display:grid;grid-template-columns:repeat(10,1fr)}
-  .seg{height:100%}
-  .row{margin-top:14px}
-  ul{margin:8px 0 0 18px}
-  @media print{ .noprint{display:none} body{margin:0} }
-</style>
-</head>
-<body>
-  <div class="hdr">
-    <img class="logo" src="icon-192.png" alt="logo"/>
-    <div>
-      <h1>CheckApp Energetico</h1>
-      <div class="muted">Report sintetico (screening orientativo, non APE)</div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="k">Cliente</div><div class="v">${(d.cliente||"—").replaceAll("<","&lt;")}</div>
-      <div class="k" style="margin-top:10px">Comune</div><div class="v">${(d.comune||"—").replaceAll("<","&lt;")}</div>
-      <div class="k" style="margin-top:10px">Superficie / Altezza / Volume</div>
-      <div class="v">${d.superficie_mq||"—"} m² · ${d.altezza_m||"—"} m · ${vol||"—"} m³</div>
-      <div class="k" style="margin-top:10px">Anno / Zona / Orientamento</div>
-      <div class="v">${d.anno_banda} · ${d.zona} · ${d.orientamento}</div>
-    </div>
+  const html=`<!doctype html><html lang="it"><head><meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/><title>Report CheckApp Energetico</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#0f172a;}
+    .head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+    .logo{width:56px;height:56px;border-radius:16px;border:1px solid #e2e8f0;}
+    h1{margin:0;font-size:22px;}
+    .muted{color:#475569;font-size:13px;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:12px;}
+    .k{color:#64748b;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;margin-bottom:6px;}
+    .v{font-size:14px;font-weight:650;}
+    .band{margin-top:10px;height:18px;border-radius:999px;border:1px solid #e2e8f0;background:linear-gradient(90deg,#0b7a3d 0%,#1ea34a 10%,#4cc85a 20%,#86d96d 30%,#cfe66b 40%,#f2e85c 50%,#f7cf4d 60%,#f2a23a 70%,#e07b2d 80%,#c84a2a 90%,#b02b2b 100%);position:relative;overflow:hidden;}
+    .ptr{position:absolute;top:-8px;left:${ptrLeft}%;transform:translateX(-6px);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid #0f172a;}
+    ul{margin:8px 0 0;padding-left:18px;}
+    @media print{button{display:none;}}
+  </style></head><body>
+    <div class="head"><img class="logo" src="${logoUrl}" alt="logo"/><div><h1>Report CheckApp Energetico</h1><div class="muted">Output indicativo (non APE) · Versione: ${VERSION}</div></div></div>
 
     <div class="card">
-      <div class="k">Indice screening</div><div class="v">${score}/120</div>
-      <div class="k" style="margin-top:10px">Classe stimata</div><div class="v">${classLabel(cls)}</div>
+      <div class="k">Esito</div>
+      <div class="v">Indice: <b>${res.score}</b>/100 · Classe stimata: <b>${res.cls}</b> · Volume: <b>${res.v}</b> m³ · 2030: <b>${res.ready ? "OK" : "NON OK"}</b></div>
+      <div class="band"><div class="ptr"></div></div>
+      <div class="muted" style="margin-top:8px;">Regola 2030: “pronto” se classe <b>C o migliore</b> (quindi sopra D).</div>
+    </div>
 
-      <div class="scale">
-        <div class="seg" style="background:#0b8a3a"></div>
-        <div class="seg" style="background:#1e9b43"></div>
-        <div class="seg" style="background:#43b047"></div>
-        <div class="seg" style="background:#78c850"></div>
-        <div class="seg" style="background:#b9d84b"></div>
-        <div class="seg" style="background:#f0e24b"></div>
-        <div class="seg" style="background:#f2c24a"></div>
-        <div class="seg" style="background:#e68b3b"></div>
-        <div class="seg" style="background:#d55a3a"></div>
-        <div class="seg" style="background:#c92f2f"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="k">Immobile</div>
+        <div class="v">Cliente: ${safe(d.cliente)} · Comune: ${safe(d.comune)}</div>
+        <div class="v">Sup: ${safe(d.superficie)} m² · H: ${safe(d.altezza)} m · Anno: ${safe(d.anno)} · Zona: ${safe(d.zona)}</div>
+        <div class="v">Tipologia: ${safe(d.tipologia)} · Posizione: ${safe(d.posizione)} · Orientamento: ${safe(d.orientamento)}</div>
+        <div class="v">Finestre: ${safe(d.num_finestre)} · Porte-finestra: ${safe(d.num_portefinestre)}</div>
       </div>
-      <div class="muted" style="margin-top:8px">2030 (orientativo): <b>${ready ? "OK (≥D)" : "NON OK (<D)"}</b></div>
+
+      <div class="card">
+        <div class="k">Involucro & Impianti</div>
+        <div class="v">Pareti: ${safe(d.pareti)} · Copertura: ${safe(d.copertura)} · Spifferi: ${safe(d.aria)}</div>
+        <div class="v">Infissi: ${safe(d.infissi_mat)} · Taglio termico: ${safe(d.taglio_termico)} · Vetri: ${safe(d.vetri)}</div>
+        <div class="v">Risc.: ${safe(d.riscaldamento)} · Terminali: ${safe(d.terminali)}</div>
+        <div class="v">Raffresc.: ${safe(d.raffrescamento)} ${d.raffrescamento==="si" ? "(" + safe(d.raff_tipo) + ")" : ""} · ACS: ${safe(d.acs)} · FV: ${safe(d.fv)}</div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1;">
+        <div class="k">Interventi consigliati</div>
+        <ul>${res.list.map(x=>"<li>"+safe(x)+"</li>").join("")}</ul>
+      </div>
+
+      <div class="card" style="grid-column:1/-1;">
+        <div class="k">Note</div>
+        <div class="v">${safe(d.note)}</div>
+      </div>
     </div>
-  </div>
 
-  <div class="card row">
-    <div class="k">Interventi consigliati</div>
-    ${interventions}
-  </div>
+    <p class="muted" style="margin-top:14px;">Contatti: ${EMAIL_TO} · WhatsApp: +39 346 315 6763</p>
+    <button onclick="window.print()">Stampa / Salva PDF</button>
+  </body></html>`;
 
-  <div class="card row">
-    <div class="k">Contatto</div>
-    <div class="v">marco.hotplay@hotmail.it · +39 346 315 6763</div>
-    <div class="muted" style="margin-top:8px">Disclaimer: indicazione preliminare. Per APE servono rilievi e calcoli secondo normativa.</div>
-  </div>
+  const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close();
+}
 
-  <div class="noprint muted" style="margin-top:14px">Suggerimento: dal menu di stampa scegli “Salva come PDF”.</div>
-  <script>window.print();</script>
-</body>
-</html>`;
-      const w = window.open("", "_blank");
-      w.document.open();
-      w.document.write(html);
-      w.document.close();
-    }
+function wire(){
+  $("btnCalc").addEventListener("click",(e)=>{e.preventDefault(); calc();});
+  $("btnSave").addEventListener("click",(e)=>{e.preventDefault(); saveDraft();});
+  $("btnLoad").addEventListener("click",(e)=>{e.preventDefault(); loadDraft();});
+  $("btnPdf").addEventListener("click",(e)=>{e.preventDefault(); reportPDF();});
+  $("infissi_mat").addEventListener("change", syncLogic);
+  $("raffrescamento").addEventListener("change", syncLogic);
+  document.addEventListener("input", setCtas);
+  syncLogic(); setCtas();
+}
 
-    function wire(){
-      $("btnCalc").addEventListener("click", calcola);
-      $("btnSave").addEventListener("click", saveDraft);
-      $("btnLoad").addEventListener("click", loadDraft);
-      $("btnPdf").addEventListener("click", reportPDF);
-
-      // logica infissi alluminio/taglio termico
-      $("infissi_materiale").addEventListener("change", () => {
-        const v = $("infissi_materiale").value;
-        $("taglio_termico").value = (v === "al") ? "no" : "na";
-        $("taglio_termico").disabled = (v !== "al");
-      });
-      $("taglio_termico").disabled = ($("infissi_materiale").value !== "al");
-
-      // logica raffrescamento
-      $("raffrescamento").addEventListener("change", () => {
-        const on = $("raffrescamento").value === "yes";
-        $("raff_tipo").disabled = !on;
-        if (!on) $("raff_tipo").value = "na";
-      });
-      $("raff_tipo").disabled = ($("raffrescamento").value !== "yes");
-    }
-
-    wire();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("./service-worker.js").catch(()=>{});});}
+wire();
   </script>
 </body>
 </html>

@@ -1,45 +1,5 @@
-// Bump this version whenever you deploy to force clients to refresh cached assets.
-const CACHE_NAME = "checkapp-energetico-v12";
-const CORE_ASSETS = [
-  "./",
-  "./?v=12",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./apple-touch-icon.png"
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener("fetch", (event) => {
-  const req = event.request;
-  if (req.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
-        // Cache-first for same-origin navigations/assets
-        const url = new URL(req.url);
-        if (url.origin === self.location.origin) {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(()=>{});
-        }
-        return res;
-      }).catch(() => caches.match("./index.html"));
-    })
-  );
-});
+const CACHE="checkapp-energetico-v13-1766950936";
+const ASSETS=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png","./apple-touch-icon.png","./favicon.png"];
+self.addEventListener("install",(e)=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).catch(()=>{}));});
+self.addEventListener("activate",(e)=>{e.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.map(k=>k!==CACHE?caches.delete(k):Promise.resolve()));await self.clients.claim();})());});
+self.addEventListener("fetch",(e)=>{const r=e.request;if(r.method!=="GET")return; e.respondWith((async()=>{const isHtml=r.headers.get("accept")?.includes("text/html"); if(isHtml){try{const f=await fetch(r);(await caches.open(CACHE)).put(r,f.clone());return f;}catch{return (await caches.match(r))||(await caches.match("./index.html"));}} const c=await caches.match(r); if(c)return c; try{const f=await fetch(r);(await caches.open(CACHE)).put(r,f.clone());return f;}catch{return c;}})());});
