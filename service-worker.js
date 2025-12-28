@@ -1,4 +1,4 @@
-const CACHE_NAME = "checkapp-energetico-v10";
+const CACHE_NAME = "checkapp-energetico-v11";
 const CORE_ASSETS = [
   "./",
   "./index.html",

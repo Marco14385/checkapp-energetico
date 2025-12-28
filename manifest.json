@@ -1,8 +1,8 @@
 {
   "name": "CheckApp Energetico",
   "short_name": "CheckApp",
-  "description": "Controllo rapido (orientativo) della classe energetica e check 2030: sei già almeno in D oppure serve un piano interventi.",
-  "start_url": "./?v=10",
+  "description": "Screening orientativo della classe energetica + check 2030 (≥D). Non sostituisce APE.",
+  "start_url": "./?v=11",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
