@@ -1,11 +1,11 @@
 {
   "name": "CheckApp Energetico",
   "short_name": "CheckApp",
-  "description": "Stima preliminare della classe energetica e consigli di intervento.",
-  "start_url": "./index.html",
+  "description": "Controllo rapido (orientativo) della classe energetica e check 2030: sei già almeno in D oppure serve un piano interventi.",
+  "start_url": "./?v=9",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f7fb",
+  "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
