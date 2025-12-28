@@ -1,6 +1,8 @@
-const CACHE_NAME = "checkapp-energetico-v11";
+// Bump this version whenever you deploy to force clients to refresh cached assets.
+const CACHE_NAME = "checkapp-energetico-v12";
 const CORE_ASSETS = [
   "./",
+  "./?v=12",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
