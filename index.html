@@ -226,6 +226,40 @@
         </select>
 
         <div class="row2">
+        <div class="row2">
+          <div>
+            <label>Riscaldamento condominiale</label>
+            <select id="heatingCentral">
+              <option value="" selected>—</option>
+              <option value="yes">Sì</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div>
+            <label>Raffrescamento</label>
+            <select id="coolingPresent">
+              <option value="" selected>—</option>
+              <option value="yes">Sì</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Tipo raffrescamento (se presente)</label>
+            <select id="coolingType">
+              <option value="" selected>—</option>
+              <option value="pdc">Pompa di calore (PDC)</option>
+              <option value="chiller">Chiller + UTA/FCU</option>
+              <option value="dx">Espansione diretta (split/VRF)</option>
+              <option value="condensing">Motocondensante / rooftop</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+
+
           <div>
             <label>Tipologia</label>
             <select id="type">
@@ -272,7 +306,57 @@
           </div>
         </div>
 
-        <label>Isolamento copertura / solaio</label>
+        <label>Isolamento copertura
+        <div class="row2">
+          <div>
+            <label>Orientamento (facciata principale)</label>
+            <select id="orientation">
+              <option value="" selected>—</option>
+              <option value="N">Nord</option>
+              <option value="NE">Nord-Est</option>
+              <option value="E">Est</option>
+              <option value="SE">Sud-Est</option>
+              <option value="S">Sud</option>
+              <option value="SO">Sud-Ovest</option>
+              <option value="O">Ovest</option>
+              <option value="NO">Nord-Ovest</option>
+            </select>
+          </div>
+          <div>
+            <label>N. finestre</label>
+            <input id="nWindows" type="number" min="0" value="4" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>N. porte-finestra</label>
+            <input id="nDoorWindows" type="number" min="0" value="1" inputmode="numeric" />
+          </div>
+          <div>
+            <label>Materiale infissi</label>
+            <select id="frameMaterial">
+              <option value="" selected>—</option>
+              <option value="pvc">PVC</option>
+              <option value="wood">Legno</option>
+              <option value="aluminium">Alluminio</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Taglio termico (se alluminio)</label>
+            <select id="thermalBreak">
+              <option value="" selected>—</option>
+              <option value="yes">Sì</option>
+              <option value="no">No</option>
+              <option value="na">N/A</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+ / solaio</label>
         <select id="roofIns">
           <option value="none" selected>Assente</option>
           <option value="some">Parziale</option>
@@ -343,62 +427,7 @@
         <p class="small" style="margin-top:10px">Tip: fai “Calcola” davanti al cliente, poi “Report PDF” e hai già un promemoria pulito.</p>
       </div>
 
-      <div class="card">
-        <h2>Risultato</h2>
-
-        <div class="pillrow">
-          <span class="badge" id="sevBadge"><span class="dot warn"></span><span>In attesa di calcolo</span></span>
-          <span class="pill" id="idxPill">Indice: —</span>
-          <span class="pill" id="classPill">Classe: —</span>
-          <span class="pill" id="volPill">Volume: —</span>
-        </div>
-
-        <div class="meter" title="Più è pieno, peggio stai (ma almeno lo sai).">
-          <div class="bar" id="bar"></div>
-        </div>
-
-        <div class="scale" aria-label="Scala classi energetiche">
-          <div class="scaleRow">
-            <div class="scaleBar">
-              <div class="seg a4" title="A4"></div>
-              <div class="seg a3" title="A3"></div>
-              <div class="seg a2" title="A2"></div>
-              <div class="seg a1" title="A1"></div>
-              <div class="seg b" title="B"></div>
-              <div class="seg c" title="C"></div>
-              <div class="seg d" title="D"></div>
-              <div class="seg e" title="E"></div>
-              <div class="seg f" title="F"></div>
-              <div class="seg g" title="G"></div>
-            </div>
-            <div class="marker"><div class="pin" id="scalePin" style="left:0%"></div></div>
-            <div class="scaleLabels">
-              <span>A4</span><span>A3</span><span>A2</span><span>A1</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="divider"></div>
-
-        <h2>Interventi consigliati</h2>
-        <div id="adviceBox" class="muted">—</div>
-
-        <div class="divider"></div>
-
-        <h2>Prossimo passo</h2>
-        <div class="muted">Se vuoi numeri veri: sopralluogo + APE/diagnosi + piano interventi.</div>
-        <div class="cta">
-          <a class="btn" id="ctaEmail" href="mailto:marco.hotplay@hotmail.it">Prenota sopralluogo APE (Email)</a>
-          <a class="btn secondary" id="ctaWhatsApp" href="https://wa.me/393463156763" target="_blank" rel="noopener">Prenota su WhatsApp</a>
-          <span class="small" id="costHint">—</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <h2>Riepilogo (JSON)</h2>
-        <div id="summary" class="jsonbox">—</div>
-      </div>
+      
     </div>
 
     <div class="card report">
@@ -409,6 +438,7 @@
       <div class="jsonbox" id="printData"></div>
       <div class="divider"></div>
       <h2>Risultato</h2>
+        <div class="chip" id="ready2030Pill">Prontezza 2030: —</div>
       <div id="printResult"></div>
       <div class="divider"></div>
       <h2>Interventi prioritari</h2>
@@ -436,6 +466,41 @@ function scoreIns(val, kind){
   return 0;
 }
 function scoreWindows(w){ return ({single:14, double_old:8, double_new:3})[w] ?? 10; }
+
+function scoreOpenings(nWin, nDoorWin, windowsType){
+  const w = Math.max(0, Number(nWin)||0);
+  const d = Math.max(0, Number(nDoorWin)||0);
+  const openings = w + (d*2); // porte-finestra pesano di più
+  // Se gli infissi sono top, penalizziamo poco anche se tanti.
+  const isGood = (windowsType === 'double_new');
+  let p = 0;
+  if (openings >= 12) p = isGood ? 1 : 8;
+  else if (openings >= 8) p = isGood ? 0 : 4;
+  return p;
+}
+function scoreFrameMaterial(mat, thermalBreak){
+  if (mat === 'aluminium'){
+    if (thermalBreak === 'no') return 6;
+    if (thermalBreak === 'yes') return 2;
+    return 4;
+  }
+  if (mat === 'wood') return 1;
+  if (mat === 'pvc') return 0;
+  return 2;
+}
+function scoreHeatingCentral(central, reg){
+  if (central !== 'yes') return 0;
+  // condominiale = spesso meno controllo: peggiora se non hai termoregolazione smart
+  return (reg === 'smart') ? 1 : 3;
+}
+function scoreCooling(present, type){
+  if (present !== 'yes') return 0;
+  if (type === 'pdc') return -1; // se è PDC moderna, è spesso un plus
+  if (type === 'chiller') return 1;
+  if (type === 'dx') return 2;
+  if (type === 'condensing') return 2;
+  return 1;
+}
 function scoreAirtight(a){ return ({poor:8, avg:4, good:1})[a] ?? 4; }
 function scoreHeat(h){ return ({old_boiler:18, condensing:10, hp:4, district:8, stove:12})[h] ?? 12; }
 function scoreEmitters(e){ return ({radiators:6, floor:2, fan:4})[e] ?? 4; }
@@ -554,6 +619,16 @@ function calc(){
 
   document.getElementById("idxPill").innerHTML = `Indice: <b>${idx.toFixed(0)}/100</b>`;
   document.getElementById("classPill").innerHTML = `Classe: <span class="classTag"><span class="swatch" style="background:${colorForClass(cls)}"></span><b>${cls}</b></span> <span class="small">(${classLabel(cls)})</span>`;
+
+  const ready2030El = document.getElementById("ready2030Pill");
+  if (ready2030El){
+    const ready = ["A4","A3","A2","A1","B","C","D"].includes(cls);
+    ready2030El.innerHTML = `Prontezza 2030: <b>${ready ? "OK (≥ D)" : "NO (&lt; D)"}</b>`;
+    ready2030El.style.borderColor = ready ? "rgba(16, 185, 129, .35)" : "rgba(239, 68, 68, .35)";
+    ready2030El.style.background = ready ? "rgba(16, 185, 129, .08)" : "rgba(239, 68, 68, .08)";
+    ready2030El.style.color = ready ? "#065f46" : "#7f1d1d";
+  }
+
   document.getElementById("volPill").innerHTML = `Volume: <b>${Math.round(area*h)} m³</b>`;
 
   const pct = Math.round(((idx-5)/(110-5))*100);
@@ -608,8 +683,35 @@ function calc(){
   document.getElementById("ctaWhatsApp").href = buildWhatsApp(sum);
   document.getElementById("costHint").textContent = euroHint(idx, area);
 
-  document.getElementById("printMeta").textContent = new Date().toLocaleString("it-IT");
-  document.getElementById("printData").textContent = JSON.stringify(sum, null, 2);
+  const printMetaEl = document.getElementById("printMeta");
+  if (printMetaEl){
+    const ready = ["A4","A3","A2","A1","B","C","D"].includes(cls);
+    const oMap = {N:"Nord",NE:"Nord-Est",E:"Est",SE:"Sud-Est",S:"Sud",SO:"Sud-Ovest",O:"Ovest",NO:"Nord-Ovest"};
+    const orient = sum.orientation ? (oMap[sum.orientation] || sum.orientation) : "—";
+    const nWin = sum.nWindows ?? "—";
+    const nDoor = sum.nDoorWindows ?? "—";
+    const matMap = {pvc:"PVC", wood:"Legno", aluminium:"Alluminio"};
+    const mat = sum.frameMaterial ? (matMap[sum.frameMaterial] || sum.frameMaterial) : "—";
+    const tbMap = {yes:"Sì", no:"No", na:"N/A"};
+    const tb = sum.thermalBreak ? (tbMap[sum.thermalBreak] || sum.thermalBreak) : "—";
+    const heatC = (sum.heatingCentral === "yes") ? "Sì" : (sum.heatingCentral === "no" ? "No" : "—");
+    const coolP = (sum.coolingPresent === "yes") ? "Sì" : (sum.coolingPresent === "no" ? "No" : "—");
+    const coolMap = {pdc:"PDC", chiller:"Chiller", dx:"Espansione diretta", condensing:"Motocondensante"};
+    const coolT = sum.coolingType ? (coolMap[sum.coolingType] || sum.coolingType) : "—";
+
+    printMetaEl.innerHTML = `
+      <div><b>Data:</b> ${new Date().toLocaleString("it-IT")}</div>
+      <div><b>Cliente:</b> ${sum.client || "—"} • <b>Comune:</b> ${sum.town || "—"}</div>
+      <div><b>Superficie:</b> ${sum.area || "—"} m² • <b>H media:</b> ${sum.h || "—"} m • <b>Volume:</b> ${Math.round((Number(sum.area)||0)*(Number(sum.h)||0))} m³</div>
+      <div><b>Anno:</b> ${sum.ageBand || "—"} • <b>Zona climatica:</b> ${sum.climate || "—"} • <b>Tipologia:</b> ${sum.type || "—"} • <b>Posizione:</b> ${sum.pos || "—"}</div>
+      <div><b>Orientamento:</b> ${orient} • <b>Finestre:</b> ${nWin} • <b>Porte-finestra:</b> ${nDoor}</div>
+      <div><b>Infissi:</b> ${sum.windows || "—"} • <b>Materiale:</b> ${mat} • <b>Taglio termico:</b> ${tb}</div>
+      <div><b>Risc. condominiale:</b> ${heatC} • <b>Raffrescamento:</b> ${coolP} • <b>Tipo:</b> ${coolT}</div>
+      <div style="margin-top:6px"><b>Prontezza 2030:</b> ${ready ? "OK (≥ D)" : "NO (< D)"}</div>
+    `;
+  }
+
+document.getElementById("printData").textContent = JSON.stringify(sum, null, 2);
   document.getElementById("printResult").innerHTML =
     `<div><b>Indice:</b> ${idx.toFixed(0)}/100 • <b>Classe stimata:</b> ${cls} (${classLabel(cls)}) • <b>Volume:</b> ${Math.round(area*h)} m³</div>
      <div style="margin-top:6px">${euroHint(idx, area)} (indicativo)</div>`;
@@ -659,7 +761,7 @@ function exportPDF(){
 }
 
 function collectForm(){
-  const ids = ["client","city","area","height","yearBand","climate","type","exposure","wallIns","windows","airtight","roofIns","heat","emitters","controls","dhw","pv","notes"];
+  const ids = ["client", "city", "area", "height", "yearBand", "climate", "type", "exposure", "wallIns", "windows", "airtight", "roofIns", "heat", "emitters", "controls", "dhw", "pv", "notes", "orientation", "nWindows", "nDoorWindows", "frameMaterial", "thermalBreak", "heatingCentral", "coolingPresent", "coolingType"];
   const o = {};
   ids.forEach(id=> o[id] = document.getElementById(id).value );
   return o;
